@@ -27,15 +27,6 @@ fn view(app: &App,frame: Frame){
                .h(4.0)
                .x_y(f*300.0,g*300.0);
            }
-           //else {
-            //    let f:f32=point_x as f32;
-             //  let g:f32=point_y as f32;
-             //  draw.ellipse()
-              // .color(WHITE)
-              // .w(2.0)
-             //  .h(2.0)
-             //  .x_y(f*210.0,g*210.0);
-          // }
            y+=0.001;
         }
         x+=0.001;
