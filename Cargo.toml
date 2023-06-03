@@ -7,3 +7,5 @@ edition = "2021"
 
 [dependencies]
 nannou="0.17"
+num-complex = "0.4"
+float-lerp = "0.2.0"

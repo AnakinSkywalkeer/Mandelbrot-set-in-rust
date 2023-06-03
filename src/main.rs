@@ -1,58 +1,49 @@
 extern crate nannou;
 use nannou::prelude::*;
-
+use num_complex::Complex;
+use float_lerp::lerp;
 fn main() {
-     nannou::app(model).update(update).run();
-}
-struct Model {
-    _window: window::Id,
-}
-fn model(app: &App) -> Model {
-    let _window = app.new_window().view(view).build().unwrap();
-    Model { _window }
+ nannou::sketch(view).run();
 }
 
-fn update(_app: &App, _model: &mut Model, _update: Update) {}
-fn view(app: &App, _model: &Model, frame: Frame){
+fn view(app: &App,frame: Frame){
 
     let draw=app.draw();
     draw.background().color(WHITE);
-    for x in 0..100  {
-        for y in 0..100  {
-           let mut a= map_range(x, 0, 100, -2, 2);
-           let mut b= map_range(y, 0, 100, -2, 2);
-           let mut n=0;
-           while n<100 {
-                let aa=a*a-b*b;
-                let bb= 2*b*b;
-                a=aa+a;
-                b=bb+b;
-                if a*a+b*b>16
-                {
-                    break;
-                }
-                n+=1;
+    let mut x=0.0;
+    while x<1.0{
+        let mut y=0.0;
+        while y<1.0{
+           let point_x=lerp(-2.0, 2.0, x);
+           let point_y=lerp(-2.0, 2.0, y);
+           let f=is_int_set(Complex::new(point_x,point_y));
+           println!("{point_y}");
+           if f==0
+           {
+               let f:f32=point_x as f32;
+               let g:f32=point_y as f32;
+               draw.ellipse()
+               .color(BLACK)
+               .w(4.0)
+               .h(4.0)
+               .x_y(f*200.0,g*200.0);
+               println!("Hello world");
            }
-         // if the n becomes 100 that means points was not going towards infinity so we can plot
-         // them
-         let f=x as f32;
-         let g=y as f32;
-         let pix=1.5;
-         if n==100
-         {
-           draw.ellipse()
-               .color(RED)
-               .w(pix)
-               .h(pix)
-               .x_y(f , g);
-         }else {
-           draw.ellipse()
-               .color(WHITE)
-               .w(pix)
-               .h(pix)
-               .x_y(f , g);    
-         }
+            y+=0.001;
         }
+        x+=0.001;
+
     }
     draw.to_frame(app,&frame).unwrap();
+}
+fn is_int_set(c:Complex<f64>)-> i32
+{
+    let mut z:Complex<f64>=Complex::new(0.0,0.0); 
+    for i in 0..1000 {
+        z=pow(z,2)+c;
+        if z.norm()>16.0{
+                return i;
+        }
+    }
+    return 0;
 }
